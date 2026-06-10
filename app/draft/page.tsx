@@ -181,13 +181,13 @@ export default function DraftPage() {
           </div>
         </div>
 
-        {/* 7-segment rumo bar */}
-        <div className="flex gap-1">
-          {Array.from({ length: 7 }).map((_, i) => (
+        {/* 11-dot progress — one per slot, fills as players are drawn */}
+        <div className="flex gap-1" role="progressbar" aria-valuenow={filledCount} aria-valuemax={11}>
+          {Array.from({ length: 11 }).map((_, i) => (
             <div
               key={i}
-              className="flex-1 h-1.5 rounded-full"
-              style={{ background: "var(--border)" }}
+              className="flex-1 h-1.5 rounded-full transition-colors"
+              style={{ background: i < filledCount ? "var(--green)" : "var(--border)" }}
             />
           ))}
         </div>

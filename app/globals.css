@@ -17,30 +17,85 @@
   --red:     #E23636;
 }
 
+/* ── Base ─────────────────────────────────────────────────── */
 html {
   background-color: var(--bg);
 }
 
 body {
-  color: var(--text);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  color:            var(--text);
+  font-family:      var(--font-inter), system-ui, sans-serif;
   background-color: var(--bg);
-  min-height: 100dvh;
+  min-height:       100dvh;
 }
 
-/* Anton for display numbers */
+/* ── Desktop: subtle grass-stripe backdrop ────────────────── */
+@media (min-width: 640px) {
+  body {
+    background-image:
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 154, 78, 0.035) 0px,
+        rgba(0, 154, 78, 0.035) 80px,
+        rgba(0, 154, 78, 0.06)  80px,
+        rgba(0, 154, 78, 0.06)  160px
+      );
+  }
+
+  /* Center the app in a "stadium frame" on wide screens */
+  .app-column {
+    box-shadow: 0 0 0 1px var(--border), 0 8px 48px rgba(0, 0, 0, 0.06);
+    border-radius: 0;
+    background: var(--bg);
+  }
+}
+
+/* ── Typography ───────────────────────────────────────────── */
 .font-display {
   font-family: var(--font-anton), sans-serif;
 }
 
-/* bottom nav safe area */
+/* ── Utility: safe-area nav padding ─────────────────────────
+   Apply pb-nav to <main> so content isn't hidden under BottomNav */
 .pb-nav {
   padding-bottom: calc(4rem + env(safe-area-inset-bottom));
 }
 
+/* ── Global interactive states ────────────────────────────── */
+
+/* All buttons/links: subtle hover lift + cursor */
+button, a {
+  cursor: pointer;
+}
+
+/* Player cards: subtle elevation so they pop off the surface */
+.player-card-shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+.player-card-shadow:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  transform:  translateY(-1px);
+}
+
+/* Primary CTA hover: shared across all pages */
+.btn-primary {
+  transition: opacity 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+.btn-primary:hover:not(:disabled) {
+  opacity:    0.92;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+.btn-primary:active:not(:disabled) {
+  transform:  scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Reduced motion ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    animation-duration:   0.01ms !important;
+    transition-duration:  0.01ms !important;
   }
 }

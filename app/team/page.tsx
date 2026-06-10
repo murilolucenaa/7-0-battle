@@ -68,17 +68,47 @@ function sectorAvg(slots: SlotInput[], indices: number[]): number {
 }
 
 export default function TeamPage() {
-  const { slots, formation, teamName, teamFlag, cupYear, chemistry, chemModifier, rerolls } = useDraftStore();
+  const { slots, formation, teamName, teamFlag, cupYear, chemistry, chemModifier, rerolls, phase } = useDraftStore();
   const positions = FIELD_POSITIONS[formation];
   const sectors   = SECTORS[formation];
 
+  const filledCount = slots.filter((s) => s.player !== null).length;
   const defAvg = sectorAvg(slots, sectors.def);
   const meiAvg = sectorAvg(slots, sectors.mei);
   const ataAvg = sectorAvg(slots, sectors.ata);
   const gkOvr  = slots[0]?.player?.ovr ?? 0;
 
-  const allFilled = slots.every((s) => s.player !== null);
+  const allFilled = filledCount === 11;
   const chemBonus = ((chemModifier - 1) * 100).toFixed(0);
+
+  // Empty state: no team drafted yet
+  if (phase === "identity" || filledCount === 0) {
+    return (
+      <>
+        <Header />
+        <main className="flex-1 pb-nav max-w-lg mx-auto w-full px-4 py-12 flex flex-col items-center justify-center gap-5 text-center">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center"
+            style={{ background: "var(--surf-2)" }}
+          >
+            <span style={{ fontSize: "2.5rem" }}>⚽</span>
+          </div>
+          <div>
+            <p className="font-bold text-lg text-text">Nenhum time montado</p>
+            <p className="text-sm text-muted mt-1">Monte os 11 no draft para ver seu time aqui.</p>
+          </div>
+          <Link
+            href="/draft"
+            className="rounded-full px-8 py-3 font-bold text-white hover:opacity-90 transition-opacity"
+            style={{ background: "var(--green)" }}
+          >
+            Ir para o draft
+          </Link>
+        </main>
+        <BottomNav />
+      </>
+    );
+  }
 
   return (
     <>
