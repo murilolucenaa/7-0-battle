@@ -1,67 +1,26 @@
-# 7–0 Battle
+# ⚽ FUTBATTLE
 
-Web app multiplayer de futebol para até 10 amigos. Draft aleatório, química, simulação ao vivo, liga Cartola-style.
+Convoque lendas de seleções históricas (1950–2022), comande sua seleção como técnico e conquiste uma Copa do Mundo completa.
 
-## Stack
-- Next.js 14 + TypeScript + Tailwind CSS + Framer Motion
-- Supabase (Postgres + Auth anônima + Realtime)
-- Zustand (estado de cliente)
+## Como funciona
 
-## Como rodar
+1. **Convoque** — Para cada posição, a roleta sorteia uma seleção histórica real (Brasil 1970, Hungria 1954, Argentina 1986…). Escolha a lenda daquela posição ou gire de novo. 11 titulares + 4 reservas (máx. 1 reserva por posição).
+2. **Comande** — Formação (4-3-3, 4-4-2, 4-2-3-1, 3-5-2, 5-4-1), mentalidade (defensiva/equilibrada/ofensiva) e estilo de jogo (posse, contra-ataque, laterais, pressão alta, falso 9). Mude tudo a cada partida — e durante a partida.
+3. **Conquiste** — Copa com 32 seleções: fase de grupos (8 grupos, saldo de gols, classificação ao vivo) e mata-mata até a final, com pênaltis.
 
-### 1. Criar projeto no Supabase
-1. Acesse [supabase.com](https://supabase.com) → New Project (plano grátis basta).
-2. Após criar, vá em **SQL Editor** e rode o conteúdo de `supabase/migrations/0001_init.sql`.
-3. Depois rode o seed: cole o conteúdo de `supabase/seed/players.sql` no SQL Editor também.
+## A partida
 
-### 2. Configurar variáveis de ambiente
-```bash
-cp .env.example .env.local
-```
-Edite `.env.local` com os valores do seu projeto Supabase:
-- `NEXT_PUBLIC_SUPABASE_URL` → Settings → API → Project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` → Settings → API → anon / public key
+Campo 2D animado com os 22 jogadores, narração em tempo real, estatísticas, velocidades 1x/1.5x/2x ou pular para o fim, pausa para mexer na tática, 3 substituições, notas dos jogadores, craque da partida e os resultados dos outros jogos da rodada.
 
-### 3. Instalar e rodar
+Os ratings dos jogadores são baseados no **auge** da carreira (Pelé 99, Ronaldo 99, Maradona 99…).
+
+## Rodando
+
 ```bash
 npm install
-npm run dev
-```
-Abra [http://localhost:3000](http://localhost:3000).
-
-### 4. Testar multiplayer
-1. Crie uma sala na aba **Sala**.
-2. Abra uma segunda aba com o mesmo código de sala.
-3. As duas abas devem ver a mesma simulação ao vivo em sincronia.
-
-## Estrutura
-```
-app/                    # rotas (App Router)
-  lobby/                # Sala — código, presença, começar
-  draft/                # Draft — sortear jogadores, 3 trocas
-  team/                 # Meu Time — campo, química, setores
-  battle/               # Batalha — ao vivo, placar, ticker
-  league/               # Liga — tabela Cartola + mata-mata
-  result/               # Resultado — placar, 7–0 bar, próxima
-  _dev/sim/             # Dev: teste do motor offline
-  api/simulate/         # Route Handler: roda a simulação no servidor
-components/             # Header, BottomNav, PlayerCard, Scoreboard...
-lib/
-  engine/               # Motor: mulberry32, simulate, chemistry, scoring, commentary
-  store/                # Zustand stores
-  supabase/             # Supabase client
-  types.ts              # Tipos TypeScript do domínio
-supabase/
-  migrations/0001_init.sql
-  seed/players.sql
+npm run dev    # http://localhost:3000
+npm test       # testes do motor de simulação
+npm run build
 ```
 
-## Critérios de pronto (por passo)
-- [ ] `npm run dev` sobe sem erro no console
-- [ ] Mesmo `seed` → mesmo placar e eventos (teste unitário)
-- [ ] Draft: sortear preenche, trocar consome das 3, em 0 trava, lendário faz reveal
-- [ ] Química muda a força do time de forma visível
-- [ ] Duas abas: mesma narração em sincronia, mesmo placar
-- [ ] Derrota zera streak e força re-draft; 7 vitórias → tela 7–0
-- [ ] Mata-mata fecha a chave com CPU quando faltam jogadores
-- [ ] Funciona em ~390px; foco de teclado visível; `prefers-reduced-motion` respeitado
+Stack: Next.js (App Router) · TypeScript · Tailwind · Framer Motion · Zustand (persistência local — seu torneio continua de onde parou).

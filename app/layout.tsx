@@ -14,8 +14,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "7–0 Battle",
-  description: "Draft · Monte seu time · Batalhe com amigos",
+  title: "FUTBATTLE",
+  description: "Convoque lendas, comande sua seleção e conquiste a Copa.",
 };
 
 export default function RootLayout({
@@ -23,7 +23,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR" className={`${anton.variable} ${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <div className="stadium-bg" aria-hidden />
+        {children}
+      </body>
     </html>
   );
 }
