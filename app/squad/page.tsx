@@ -9,6 +9,7 @@ import RouletteModal from "@/components/RouletteModal";
 import { useCareer, allCards, cardById, BENCH_SIZE } from "@/lib/game/store";
 import { FORMATIONS, FORMATION_IDS, effectiveOvr } from "@/lib/game/formations";
 import { MENTALITY_LABEL, STYLE_LABEL, STYLE_DESC } from "@/lib/game/tactics";
+import { CAP_CRACK, CAP_ELITE, countCracks, countElite } from "@/lib/game/rules";
 import type { Card, FormationId, GameStyle, Mentality, Position } from "@/lib/game/types";
 import { POSITION_LABEL } from "@/lib/game/types";
 
@@ -137,9 +138,23 @@ function DraftView({
             Toque numa posição, gire a roleta e convoque uma lenda. 11 titulares + {BENCH_SIZE} reservas.
           </p>
         </div>
-        <div className="glass px-4 py-2 text-center">
-          <div className="font-display text-2xl text-[var(--accent)]">{drafted}/{total}</div>
-          <div className="text-[10px] uppercase tracking-wider text-[var(--muted)]">convocados</div>
+        <div className="flex gap-2">
+          <div className="glass px-4 py-2 text-center">
+            <div className="font-display text-2xl text-[var(--accent)]">{drafted}/{total}</div>
+            <div className="text-[10px] uppercase tracking-wider text-[var(--muted)]">convocados</div>
+          </div>
+          <div className="glass px-4 py-2 text-center">
+            <div className={`font-display text-2xl ${c.rerollsLeft <= 2 ? "text-[var(--red)]" : "text-[var(--gold)]"}`}>{c.rerollsLeft}</div>
+            <div className="text-[10px] uppercase tracking-wider text-[var(--muted)]">giros extras</div>
+          </div>
+          <div className="glass px-4 py-2 text-center">
+            <div className="font-display text-2xl">
+              <span className={countCracks(allCards(c)) >= CAP_CRACK ? "text-[var(--red)]" : "text-[var(--gold)]"}>{countCracks(allCards(c))}/{CAP_CRACK}</span>
+              <span className="text-[var(--muted)] text-base"> · </span>
+              <span className={countElite(allCards(c)) >= CAP_ELITE ? "text-[var(--red)]" : "text-[var(--accent)]"}>{countElite(allCards(c))}/{CAP_ELITE}</span>
+            </div>
+            <div className="text-[10px] uppercase tracking-wider text-[var(--muted)]">craques 95+ · elite 90+</div>
+          </div>
         </div>
       </div>
 
@@ -262,6 +277,9 @@ function DraftView({
         open={roll !== null && rollPos !== null}
         pos={rollPos}
         usedNames={usedNames}
+        squadCards={allCards(c)}
+        rerollsLeft={c.rerollsLeft}
+        onSpendReroll={c.spendReroll}
         onPick={handlePick}
         onClose={() => setRoll(null)}
       />

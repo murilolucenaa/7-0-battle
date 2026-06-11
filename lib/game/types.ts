@@ -49,7 +49,7 @@ export interface Card {
 }
 
 // ── Formations & tactics ─────────────────────────────────────
-export type FormationId = "4-3-3" | "4-4-2" | "4-2-3-1" | "3-5-2" | "5-4-1";
+export type FormationId = "4-3-3" | "4-4-2" | "4-2-3-1" | "4-3-1-2" | "3-5-2" | "3-4-3" | "5-4-1";
 export type Mentality = "defensivo" | "equilibrado" | "ofensivo";
 export type GameStyle = "posse" | "contra-ataque" | "laterais" | "pressao" | "falso-9";
 

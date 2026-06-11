@@ -8,6 +8,7 @@ import type {
 import { FORMATIONS, assignLineup } from "./formations";
 import { advanceCup, drawCup, recordUserResult, simulateRound, currentRound, buildAiTeam } from "./cup";
 import { SQUAD_BY_ID } from "@/lib/data/squads";
+import { REROLL_BUDGET } from "./rules";
 
 export interface DraftSlot {
   pos: Position;
@@ -28,6 +29,7 @@ interface CareerState {
   slots: DraftSlot[];        // 11, positions from draftFormation
   benchSlots: BenchSlot[];   // 4, position chosen by user
   draftDone: boolean;
+  rerollsLeft: number;       // shared budget for extra roulette spins
 
   tactics: Tactics;
   lineupIds: (string | null)[]; // card player ids aligned to FORMATIONS[tactics.formation]
@@ -41,6 +43,7 @@ interface CareerState {
   fillSlot: (index: number, card: Card) => void;
   setBenchPos: (index: number, pos: Position | null) => void;
   fillBench: (index: number, card: Card) => void;
+  spendReroll: () => void;
   completeDraft: () => void;
   setFormation: (f: FormationId) => void;
   setTactics: (t: Partial<Tactics>) => void;
@@ -91,6 +94,7 @@ export const useCareer = create<CareerState>()(
       slots: slotsForFormation("4-2-3-1"),
       benchSlots: Array.from({ length: BENCH_SIZE }, (): BenchSlot => ({ pos: null, card: null })),
       draftDone: false,
+      rerollsLeft: REROLL_BUDGET,
       tactics: initialTactics,
       lineupIds: FORMATIONS["4-2-3-1"].map(() => null),
       benchIds: [],
@@ -104,6 +108,7 @@ export const useCareer = create<CareerState>()(
           slots: slotsForFormation(formation),
           benchSlots: Array.from({ length: BENCH_SIZE }, (): BenchSlot => ({ pos: null, card: null })),
           draftDone: false,
+          rerollsLeft: REROLL_BUDGET,
           tactics: { ...initialTactics, formation },
           lineupIds: FORMATIONS[formation].map(() => null),
           benchIds: [],
@@ -131,6 +136,9 @@ export const useCareer = create<CareerState>()(
           benchSlots[index] = { ...benchSlots[index], card };
           return { benchSlots };
         }),
+
+      spendReroll: () =>
+        set((s) => ({ rerollsLeft: Math.max(0, s.rerollsLeft - 1) })),
 
       completeDraft: () => {
         const s = get();
@@ -223,6 +231,7 @@ export const useCareer = create<CareerState>()(
           slots: slotsForFormation("4-2-3-1"),
           benchSlots: Array.from({ length: BENCH_SIZE }, (): BenchSlot => ({ pos: null, card: null })),
           draftDone: false,
+          rerollsLeft: REROLL_BUDGET,
           tactics: initialTactics,
           lineupIds: FORMATIONS["4-2-3-1"].map(() => null),
           benchIds: [],

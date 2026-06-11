@@ -2,7 +2,8 @@ import { SQUADS, eligiblePlayers } from "../../data/squads";
 import { FORMATIONS, FORMATION_IDS, assignLineup } from "../formations";
 import { runFullMatch } from "../engine";
 import { buildAiTeam, drawCup, groupTable, simulateRound, advanceCup, currentRound, GROUP_NAMES } from "../cup";
-import type { Position } from "../types";
+import { canDraft, countCracks, countElite, CAP_CRACK, CAP_ELITE, REROLL_BUDGET } from "../rules";
+import type { Card, Position } from "../types";
 
 describe("squads data", () => {
   const ALL_POSITIONS: Position[] = ["GK", "RB", "CB", "LB", "DM", "CM", "AM", "RW", "LW", "ST"];
@@ -132,5 +133,36 @@ describe("cup", () => {
       expect(totalPts).toBeLessThanOrEqual(18);    // max: no draws
       for (const row of table) expect(row.p).toBe(3);
     }
+  });
+});
+
+describe("draft rules (anti-apelão)", () => {
+  const mk = (ovr: number, i: number): Card => ({
+    player: { id: `t-${i}`, name: `P${i}`, positions: ["ST"], ovr },
+    squadId: "t", nation: "Teste", year: 2000, flag: "🏳️",
+  });
+
+  it("has a finite reroll budget", () => {
+    expect(REROLL_BUDGET).toBeGreaterThan(0);
+    expect(REROLL_BUDGET).toBeLessThan(20);
+  });
+
+  it("blocks a second 95+ crack", () => {
+    const squad = [mk(96, 1)];
+    expect(countCracks(squad)).toBe(1);
+    expect(canDraft({ id: "x", name: "X", positions: ["ST"], ovr: 99 }, squad).ok).toBe(false);
+    expect(canDraft({ id: "x", name: "X", positions: ["ST"], ovr: 94 }, squad).ok).toBe(true);
+  });
+
+  it("blocks a fourth 90+ elite player (crack counts toward elite cap)", () => {
+    const squad = [mk(96, 1), mk(92, 2), mk(90, 3)];
+    expect(countElite(squad)).toBe(3);
+    expect(canDraft({ id: "x", name: "X", positions: ["ST"], ovr: 91 }, squad).ok).toBe(false);
+    expect(canDraft({ id: "x", name: "X", positions: ["ST"], ovr: 89 }, squad).ok).toBe(true);
+  });
+
+  it("caps are challenge-tuned", () => {
+    expect(CAP_CRACK).toBe(1);
+    expect(CAP_ELITE).toBe(3);
   });
 });

@@ -5,7 +5,9 @@ Convoque lendas de seleções históricas (1950–2022), comande sua seleção c
 ## Como funciona
 
 1. **Convoque** — Para cada posição, a roleta sorteia uma seleção histórica real (Brasil 1970, Hungria 1954, Argentina 1986…). Escolha a lenda daquela posição ou gire de novo. 11 titulares + 4 reservas (máx. 1 reserva por posição).
-2. **Comande** — Formação (4-3-3, 4-4-2, 4-2-3-1, 3-5-2, 5-4-1), mentalidade (defensiva/equilibrada/ofensiva) e estilo de jogo (posse, contra-ataque, laterais, pressão alta, falso 9). Mude tudo a cada partida — e durante a partida.
+   - **Desafio de verdade:** o 1º giro de cada vaga é grátis, mas você só tem **10 giros extras** no draft inteiro — gaste com sabedoria.
+   - **Teto de estrelas:** no máximo **1 craque (OVR 95+)** e **3 jogadores de elite (OVR 90+)** no elenco. Nada de time só de 99.
+2. **Comande** — Formação (4-3-3, 4-4-2, 4-2-3-1, 4-3-1-2, 3-5-2, 3-4-3, 5-4-1), mentalidade (defensiva/equilibrada/ofensiva) e estilo de jogo (posse, contra-ataque, laterais, pressão alta, falso 9). Mude tudo a cada partida — e durante a partida.
 3. **Conquiste** — Copa com 32 seleções: fase de grupos (8 grupos, saldo de gols, classificação ao vivo) e mata-mata até a final, com pênaltis.
 
 ## A partida
